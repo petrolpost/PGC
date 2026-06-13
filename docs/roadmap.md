@@ -23,7 +23,7 @@
 - [X] **Claude Code Adapter**：实现 PGC YAML 到 `CLAUDE.md` (角色/边界) 的编译。
 - [X] **Adapter Runtime Versioning**：实现运行时版本化机制，支持 SemVer 兼容性检查。
 - [X] **Runtime Mapping Docs**：完善 Claude Code 映射文档。
-- [ ] **Cursor / Windsurf Adapter**：实现 PGC YAML 到 `.cursorrules` 的编译。
+- [ ] **Trae Adapter**：实现 PGC YAML 到 Trae IDE 规则文件的编译。
 - [ ] **Example Showcase**：提供完整的 Coding Agent 防漂移治理案例，对比使用 PGC 前后的 Agent 行为差异。
 
 ## 🔵 Phase 3: Workflow Integration (Layer 1 Advanced)
