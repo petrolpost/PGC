@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import List, Dict, Any
 from pydantic import ValidationError
 
-from .models import PGCDocument
+from .model import PGCDocument
 
 
 class PGCValidationError(Exception):
