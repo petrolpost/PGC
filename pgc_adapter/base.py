@@ -50,6 +50,15 @@ class BaseAdapter(ABC):
         """
         ...
 
+    @abstractmethod
+    def get_target_runtime_version(self) -> str:
+        """Return the supported runtime version.
+
+        Returns:
+            str: Runtime with version, e.g. "claude-code@1.0".
+        """
+        ...
+
     def validate_compatibility(self, document: PGCDocument) -> bool:
         """Check whether a PGCDocument meets the minimum requirements for this runtime.
 

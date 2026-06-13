@@ -17,6 +17,9 @@ class StubAdapter(BaseAdapter):
     def get_target_runtime(self) -> str:
         return "stub-runtime"
 
+    def get_target_runtime_version(self) -> str:
+        return "stub-runtime@1.0"
+
     def get_supported_extensions(self) -> List[str]:
         return [".txt"]
 

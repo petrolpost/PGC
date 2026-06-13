@@ -54,6 +54,10 @@ class ClaudeCodeAdapter(BaseAdapter):
         """Return the runtime identifier."""
         return "claude-code"
 
+    def get_target_runtime_version(self) -> str:
+        """Return the supported Claude Code runtime version."""
+        return "claude-code@1.0"
+
     def get_supported_extensions(self) -> List[str]:
         """Return supported file extensions."""
         return [".md"]
