@@ -17,7 +17,26 @@
 - 如果没有合适的 Issue，请先创建一个，明确描述：
   - **Context (背景)**：为什么要做这个？
   - **Tasks (任务)**：具体需要做什么？
-  - **DoD (Definition of Done, 验收标准)**：如何证明这个 Issue 已经圆满完成？（必须是可验证的，如“通过 pytest”、“生成特定格式的 Markdown”）。
+  - **DoD (Definition of Done, 验收标准)**：如何证明这个 Issue 已经圆满完成？（必须是可验证的，如"通过 pytest"、"生成特定格式的 Markdown"）。
+
+**认领 Issue**：找到要做的 Issue 后，立即认领以避免重复劳动：
+
+```bash
+# 认领：将自己设为 Assignee
+gh issue edit <N> --add-assignee @me
+
+# 开始执行：添加 in-progress 标签
+gh issue edit <N> --add-label in-progress
+```
+
+**状态流转**（通过 Label 同步进度）：
+
+| 阶段 | Label | 操作 |
+|------|-------|------|
+| 待认领 | _(无额外 label)_ | - |
+| 已认领，开发中 | `in-progress` | `--add-label in-progress` |
+| 开发完成，提交 PR | _(移除 `in-progress`)_ | `--remove-label in-progress` |
+| PR 合并，Issue 关闭 | _(自动关闭)_ | PR 中写 `Closes #N` |
 
 ### Step 2: 分支开发 (Branching)
 
