@@ -2,5 +2,6 @@
 
 from .base import BaseAdapter
 from .claude import ClaudeCodeAdapter
+from .trae import TraeAdapter
 
-__all__ = ["BaseAdapter", "ClaudeCodeAdapter"]
+__all__ = ["BaseAdapter", "ClaudeCodeAdapter", "TraeAdapter"]
