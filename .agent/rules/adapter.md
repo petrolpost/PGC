@@ -37,3 +37,44 @@ When adding a new adapter or updating for a new runtime version:
 - Claude Code: single `CLAUDE.md`
 - Trae: multiple files under `.trae/rules/` with YAML frontmatter
 - Future adapters: follow the target runtime's native convention
+
+## Runtime Mapping Documentation
+
+Runtime mapping docs live under `docs/runtime-mapping/` and describe how PGC concepts translate to each target runtime.
+
+### File Naming
+
+| Pattern | When to Use | Example |
+|---------|-------------|---------|
+| `<runtime>.md` | Default — covers all compatible versions with same mapping strategy | `claude-code.md`, `trae.md` |
+| `<runtime>@<major>.x.md` | Breaking change — when a major version requires a different mapping strategy | `claude-code@2.x.md` |
+
+Rules:
+
+1. **Default file** (`<runtime>.md`) always exists. Its frontmatter `versions` field specifies the compatible range (e.g. `">=1.0"`).
+2. **Versioned file** (`<runtime>@<major>.x.md`) is created ONLY when a major version introduces breaking changes that require a different mapping strategy.
+3. Multiple versions sharing the same mapping strategy use one file with a broad `versions` range.
+4. The adapter's `get_target_runtime_version()` return value determines which mapping doc applies.
+
+### Frontmatter Schema
+
+Every mapping doc MUST include YAML frontmatter:
+
+```yaml
+---
+runtime: <runtime-name>        # e.g. "trae", "claude-code"
+versions: "<semver-range>"     # e.g. ">=1.0", ">=1.3 <2.0"
+status: active | deprecated | draft
+adapter: pgc_adapter.<runtime>.<AdapterClass>
+---
+```
+
+### When to Create a Versioned File
+
+1. Runtime v2.0 changes the config file format (e.g. `.trae/rules/` → `.trae/policies/`)
+2. Runtime v2.0 removes or renames features that PGC maps to
+3. The adapter's render logic diverges significantly between major versions
+
+Do NOT create a versioned file for:
+- Minor additions (new optional fields) — update the default doc's `versions` range
+- Bug fixes or clarifications — update the default doc in place
