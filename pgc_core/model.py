@@ -60,8 +60,18 @@ class GovernanceAuthority(BaseModel):
     gate_overrides: Dict[str, ViolationPolicy] = Field(default_factory=dict)
 
 
+class PGCMetadata(BaseModel):
+    """PGC 文档元数据"""
+    target_runtime: Optional[str] = Field(
+        default=None,
+        description="Target runtime with version specifier, e.g. 'claude-code@>=1.0'"
+    )
+    model_config = ConfigDict(extra="forbid")
+
+
 class PGCDocument(BaseModel):
     """PGC 治理契约根文档"""
+    metadata: Optional[PGCMetadata] = Field(default=None)
     personas: List[Persona] = Field(default_factory=list)
     governance_gates: List[GovernanceGate] = Field(default_factory=list)
     capabilities: List[Capability] = Field(default_factory=list)

@@ -1,3 +1,10 @@
+---
+runtime: claude-code
+versions: ">=1.0"
+status: active
+adapter: pgc_adapter.claude.ClaudeCodeAdapter
+---
+
 # PGC → Claude Code Runtime Mapping
 
 This document explains how PGC (Persona-Governance-Capability) concepts map to Claude Code's native mechanisms, and how the `ClaudeCodeAdapter` translates your governance contract into an executable `CLAUDE.md`.
