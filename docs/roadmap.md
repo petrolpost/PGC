@@ -5,22 +5,24 @@
 
 ---
 
-## 🟢 Phase 1: Core Foundation (Layer 0) - *Current*
+## 🟢 Phase 1: Core Foundation (Layer 0) - *Completed*
 
 **目标**：夯实治理契约基石，确保 Schema 的严谨性与机器可验证性。
 
 - [X] **PGC Spec v0.3 定稿**：完成从 Execution 到 Governance 的哲学转向与术语净化。
 - [X] **Pydantic Models**：实现 `Persona`, `GovernanceGate`, `Capability`, `GovernanceBinding` 核心模型。
 - [X] **Validation Engine**：实现引用完整性、能力归属校验、关卡覆盖检查。
-- [ ] **CLI Tool (`pgc-core`)**：完善 `pgc validate` (单文件/目录) 与 `pgc init` (生成标准模板) 命令。
-- [ ] **Test Coverage**：核心模型与验证规则 100% 单元测试覆盖。
+- [X] **CLI Tool (`pgc-core`)**：完善 `pgc validate` (单文件/目录) 与 `pgc init` (生成标准模板) 命令。
+- [X] **Test Coverage**：核心模型与验证规则 100% 单元测试覆盖。
 
-## 🟡 Phase 2: Runtime Proof (Layer 1) - *Next*
+## 🟡 Phase 2: Runtime Proof (Layer 1) - *In Progress*
 
-**目标**：通过主流 AI IDE 的 Adapter，证明 PGC 在真实环境中的“无感控制”价值。
+**目标**：通过主流 AI IDE 的 Adapter，证明 PGC 在真实环境中的"无感控制"价值。
 
-- [ ] **Adapter Architecture**：定义 `BaseAdapter` 抽象接口与渲染生命周期。
-- [ ] **Claude Code Adapter**：实现 PGC YAML 到 `CLAUDE.md` (角色/边界) + MCP Tool Schema 的编译。
+- [X] **Adapter Architecture**：定义 `BaseAdapter` 抽象接口与渲染生命周期。
+- [X] **Claude Code Adapter**：实现 PGC YAML 到 `CLAUDE.md` (角色/边界) 的编译。
+- [X] **Adapter Runtime Versioning**：实现运行时版本化机制，支持 SemVer 兼容性检查。
+- [X] **Runtime Mapping Docs**：完善 Claude Code 映射文档。
 - [ ] **Cursor / Windsurf Adapter**：实现 PGC YAML 到 `.cursorrules` 的编译。
 - [ ] **Example Showcase**：提供完整的 Coding Agent 防漂移治理案例，对比使用 PGC 前后的 Agent 行为差异。
 
