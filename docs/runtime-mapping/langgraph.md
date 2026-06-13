@@ -5,6 +5,6 @@ status: draft
 adapter: pending
 ---
 
-# PGC ¡ú LangGraph Runtime Mapping
+# PGC â†’ LangGraph Runtime Mapping
 
-> **Status: Draft** ¡ª This mapping document is a placeholder. LangGraph adapter has not been implemented yet.
+> **Status: Draft** â€” This mapping document is a placeholder. LangGraph adapter has not been implemented yet.

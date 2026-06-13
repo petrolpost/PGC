@@ -5,6 +5,6 @@ status: draft
 adapter: pending
 ---
 
-# PGC ¡ú Cursor Runtime Mapping
+# PGC â†’ Cursor Runtime Mapping
 
-> **Status: Draft** ¡ª This mapping document is a placeholder. Cursor adapter has not been implemented yet.
+> **Status: Draft** â€” This mapping document is a placeholder. Cursor adapter has not been implemented yet.
