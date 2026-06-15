@@ -6,10 +6,9 @@ from pathlib import Path
 from typing import Optional
 
 import typer
-import yaml
 from rich.console import Console
-from rich.table import Table
 
+from .model import PGCDocument
 from .validator import PGCValidator, PGCValidationError, check_runtime_compatibility
 
 app = typer.Typer(
