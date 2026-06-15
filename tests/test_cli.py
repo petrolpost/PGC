@@ -298,3 +298,45 @@ class TestValidate:
         assert result.exit_code == 1
         assert "[OK]" in result.output
         assert "[FAIL]" in result.output
+
+
+# ── pgc render tests ───────────────────────────────────────────────────
+
+
+class TestRender:
+    """Test cases for pgc render command."""
+
+    # R-1: Render with claude-code adapter
+    def test_render_claude_code(self, tmp_path: Path) -> None:
+        f = write_pgc_yaml(tmp_path, "valid_doc")
+        out_dir = tmp_path / "output"
+        result = runner.invoke(app, ["render", str(f), "--adapter", "claude-code", "--output", str(out_dir)])
+        assert result.exit_code == 0
+        assert (out_dir / "CLAUDE.md").exists()
+        content = (out_dir / "CLAUDE.md").read_text(encoding="utf-8")
+        assert "Core Developer" in content
+        assert "NEVER" in content
+
+    # R-2: Render with trae adapter
+    def test_render_trae(self, tmp_path: Path) -> None:
+        f = write_pgc_yaml(tmp_path, "valid_doc")
+        out_dir = tmp_path / "output"
+        result = runner.invoke(app, ["render", str(f), "--adapter", "trae", "--output", str(out_dir)])
+        assert result.exit_code == 0
+        assert (out_dir / ".trae" / "rules" / "persona-developer.md").exists()
+        assert (out_dir / ".trae" / "rules" / "governance.md").exists()
+
+    # R-3: Invalid adapter name
+    def test_render_invalid_adapter(self, tmp_path: Path) -> None:
+        f = write_pgc_yaml(tmp_path, "valid_doc")
+        result = runner.invoke(app, ["render", str(f), "--adapter", "nonexistent"])
+        assert result.exit_code == 1
+        assert "Unknown adapter" in result.output
+
+    # R-4: Invalid YAML file
+    def test_render_invalid_yaml(self, tmp_path: Path) -> None:
+        bad_file = tmp_path / "bad.pgc.yaml"
+        bad_file.write_text("invalid: {", encoding="utf-8")
+        result = runner.invoke(app, ["render", str(bad_file), "--adapter", "claude-code"])
+        assert result.exit_code == 1
+        assert "Validation failed" in result.output

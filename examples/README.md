@@ -273,33 +273,8 @@ Agent:    [BOUNDARY CHECK: 访问生产环境数据库 → BLOCKED]
 pgc validate examples/coding-agent-pgc.yaml
 
 # 2. Generate Claude Code output
-python -c "
-from pgc_adapter.claude import ClaudeCodeAdapter
-from pgc_core.model import PGCDocument
-import yaml
-
-with open('examples/coding-agent-pgc.yaml', encoding='utf-8') as f:
-    doc = PGCDocument(**yaml.safe_load(f))
-
-adapter = ClaudeCodeAdapter()
-result = adapter.render(doc)
-print(result['CLAUDE.md'])
-"
+pgc render examples/coding-agent-pgc.yaml --adapter claude-code
 
 # 3. Generate Trae IDE output
-python -c "
-from pgc_adapter.trae import TraeAdapter
-from pgc_core.model import PGCDocument
-import yaml
-
-with open('examples/coding-agent-pgc.yaml', encoding='utf-8') as f:
-    doc = PGCDocument(**yaml.safe_load(f))
-
-adapter = TraeAdapter()
-result = adapter.render(doc)
-for path, content in result.items():
-    print(f'=== {path} ===')
-    print(content)
-    print()
-"
+pgc render examples/coding-agent-pgc.yaml --adapter trae --output .trae
 ```
