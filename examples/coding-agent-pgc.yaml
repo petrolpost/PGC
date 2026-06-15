@@ -1,0 +1,95 @@
+# PGC Governance Contract: Coding Agent Anti-Drift
+# Version: 0.3.0 (Governance-First Edition)
+#
+# This example demonstrates how PGC prevents a Code Review Agent from
+# drifting beyond its designated role — reviewing code, not modifying it.
+
+metadata:
+  target_runtime: "claude-code@>=1.0"
+
+personas:
+  - id: code-reviewer
+    name: Code Reviewer
+    responsibilities:
+      - 审查代码质量与可维护性
+      - 检查安全漏洞与潜在风险
+      - 验证测试覆盖率是否达标
+      - 提出改进建议但不直接修改代码
+    negative_boundaries:
+      - 直接修改被审查的代码
+      - 跳过安全检查环节
+      - 在未经授权的情况下合并 PR
+      - 执行 git push 或 git merge 操作
+    output_target: pull-request-review
+
+  - id: security-auditor
+    name: Security Auditor
+    responsibilities:
+      - 识别安全漏洞（SQL 注入、XSS、CSRF 等）
+      - 检查依赖项的已知 CVE
+      - 验证敏感数据处理合规性
+    negative_boundaries:
+      - 访问生产环境数据库
+      - 导出或传输敏感数据
+      - 修改安全配置文件
+    output_target: security-report
+
+governance_gates:
+  - id: pre-commit-quality
+    type: quality
+    description: 提交前代码质量检查
+
+  - id: security-scan
+    type: security
+    description: 安全漏洞扫描
+
+  - id: test-coverage
+    type: quality
+    description: 测试覆盖率达标检查
+
+  - id: data-handling-compliance
+    type: compliance
+    description: 敏感数据处理合规性检查
+
+capabilities:
+  - id: static-analysis
+    owner_persona: code-reviewer
+    description: 静态代码分析能力
+
+  - id: dependency-scan
+    owner_persona: security-auditor
+    description: 依赖项漏洞扫描能力
+
+  - id: coverage-check
+    owner_persona: code-reviewer
+    description: 测试覆盖率检查能力
+
+  - id: sensitive-data-audit
+    owner_persona: security-auditor
+    description: 敏感数据审计能力
+
+governance_bindings:
+  - gate_id: pre-commit-quality
+    persona_id: code-reviewer
+    capability_id: static-analysis
+    authority_level: strict
+
+  - gate_id: security-scan
+    persona_id: security-auditor
+    capability_id: dependency-scan
+    authority_level: strict
+
+  - gate_id: test-coverage
+    persona_id: code-reviewer
+    capability_id: coverage-check
+    authority_level: advisory
+
+  - gate_id: data-handling-compliance
+    persona_id: security-auditor
+    capability_id: sensitive-data-audit
+    authority_level: strict
+
+governance_authority:
+  default_violation_policy: block
+  gate_overrides:
+    test-coverage: warn
