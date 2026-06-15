@@ -15,7 +15,7 @@
 - [X] **CLI Tool (`pgc-core`)**：完善 `pgc validate` (单文件/目录) 与 `pgc init` (生成标准模板) 命令。
 - [X] **Test Coverage**：核心模型与验证规则 100% 单元测试覆盖。
 
-## 🟡 Phase 2: Runtime Proof (Layer 1) - *In Progress*
+## 🟢 Phase 2: Runtime Proof (Layer 1) - *Completed* (v0.3)
 
 **目标**：通过主流 AI IDE 的 Adapter，证明 PGC 在真实环境中的"无感控制"价值。
 
@@ -24,9 +24,21 @@
 - [X] **Adapter Runtime Versioning**：实现运行时版本化机制，支持 SemVer 兼容性检查。
 - [X] **Runtime Mapping Docs**：完善 Claude Code / Trae 映射文档，建立版本化命名规范。
 - [X] **Trae Adapter**：实现 PGC YAML 到 Trae IDE 规则文件（`.trae/rules/`）的编译。
-- [ ] **Example Showcase**：提供完整的 Coding Agent 防漂移治理案例，对比使用 PGC 前后的 Agent 行为差异。
+- [X] **Example Showcase**：提供完整的 Coding Agent 防漂移治理案例，对比使用 PGC 前后的 Agent 行为差异。
+- [X] **CLI Bug Fix & Cleanup**：修复 validate NameError，清理空文件，添加 pytest 配置。
+- [X] **`pgc render` Command**：添加 CLI 渲染命令，支持 `pgc render <yaml> --adapter <name> [--output <dir>]`。
 
-## 🔵 Phase 3: Workflow Integration (Layer 1 Advanced)
+## 🟡 Phase 2.5: Dogfooding (Layer 1 Validation) - *In Progress*
+
+**目标**：用 PGC 管理自身，验证端到端流程的可用性，发现并修复实际使用中的问题。
+
+- [ ] **Self-Governance**：为 PGC 项目编写 `.pgc.yaml`，用 `pgc render` 生成运行时配置，对比手写规则。
+- [ ] **Rule System Refinement**：基于 dogfooding 结果，调整 Always-on / On-demand 规则分层。
+- [ ] **Stability Fixes**：解决 `.git` 目录反复丢失等稳定性问题，归档解决方案。
+
+## 🔵 Phase 3: Workflow Integration (Layer 1 Advanced) - *Deferred*
+
+> **Note**: Phase 3 将在 Phase 2.5 Dogfooding 完成且 Coding Agent 磨合清晰后启动。
 
 **目标**：将治理契约无缝注入到复杂的编排框架中，实现“声明即路由”。
 
