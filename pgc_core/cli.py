@@ -1,9 +1,9 @@
 """
-PGC Core: CLI entry point — pgc init & pgc validate.
+PGC Core: CLI entry point — pgc init, pgc validate & pgc render.
 """
 
 from pathlib import Path
-from typing import Optional
+from typing import Dict, Optional
 
 import typer
 from rich.console import Console
@@ -147,3 +147,67 @@ def _check_version_warnings(doc: PGCDocument) -> None:
             console.print(f"[yellow][WARN] {w}[/yellow]")
     except ImportError:
         pass
+
+
+# --- Adapter Registry ---
+
+ADAPTER_REGISTRY = {
+    "claude-code": "pgc_adapter.claude.ClaudeCodeAdapter",
+    "trae": "pgc_adapter.trae.TraeAdapter",
+}
+
+
+def _get_adapter(name: str):
+    """Load an adapter class by name from the registry."""
+    if name not in ADAPTER_REGISTRY:
+        available = ", ".join(sorted(ADAPTER_REGISTRY.keys()))
+        console.print(
+            f"[red]Error:[/red] Unknown adapter '{name}'. Available: {available}"
+        )
+        raise typer.Exit(code=1)
+
+    module_path, class_name = ADAPTER_REGISTRY[name].rsplit(".", 1)
+    try:
+        import importlib
+        module = importlib.import_module(module_path)
+        return getattr(module, class_name)()
+    except (ImportError, AttributeError) as e:
+        console.print(f"[red]Error:[/red] Failed to load adapter '{name}': {e}")
+        raise typer.Exit(code=1)
+
+
+@app.command()
+def render(
+    path: Path = typer.Argument(..., help="PGC YAML file to render"),
+    adapter: str = typer.Option(..., "--adapter", "-a", help="Target adapter name"),
+    output: Path = typer.Option(".", "--output", "-o", help="Output directory"),
+) -> None:
+    """Render a PGC governance document to runtime-specific configuration files."""
+    target = path.resolve()
+
+    if not target.exists():
+        console.print(f"[red]Error:[/red] File '{target}' not found.")
+        raise typer.Exit(code=1)
+
+    # Validate first
+    try:
+        doc = PGCValidator.load_and_validate(str(target))
+    except (PGCValidationError, FileNotFoundError) as e:
+        console.print(f"[red]Error:[/red] Validation failed: {e}")
+        raise typer.Exit(code=1)
+
+    # Load adapter and render
+    adapter_instance = _get_adapter(adapter)
+    files: Dict[str, str] = adapter_instance.render(doc)
+
+    # Write output files
+    out_dir = output.resolve()
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    for rel_path, content in files.items():
+        file_path = out_dir / rel_path
+        file_path.parent.mkdir(parents=True, exist_ok=True)
+        file_path.write_text(content, encoding="utf-8")
+        console.print(f"  [green]Created:[/green] {rel_path}")
+
+    console.print(f"\n[green][OK] Rendered {len(files)} file(s) to '{out_dir}'[/green]")
