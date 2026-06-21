@@ -1,0 +1,19 @@
+governance:
+  mode: run-time
+
+modules:
+  pgc:
+    enabled: true
+    contract: .pgc/agent.pgc.yaml
+    adapter: pgc:claude-code
+
+  tgs:
+    enabled: true
+    contract: .tgs/traceability.yaml
+    adapter: tgs:file
+    integrity_level: L2
+    command_surface: slash
+
+output:
+  directory: .
+  cache: .pgc/cache

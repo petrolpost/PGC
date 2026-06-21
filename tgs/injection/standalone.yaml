@@ -1,0 +1,14 @@
+governance:
+  mode: run-time
+
+modules:
+  tgs:
+    enabled: true
+    contract: .tgs/traceability.yaml
+    adapter: tgs:file
+    integrity_level: L2
+    command_surface: slash
+
+output:
+  directory: .
+  cache: .pgc/cache

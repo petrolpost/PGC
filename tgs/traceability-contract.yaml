@@ -1,0 +1,49 @@
+metadata:
+  name: tgs
+  version: 0.1.0
+
+traceability:
+  concepts:
+    anchor:
+      description: Traceability starting point.
+      required_fields:
+        - id
+        - source
+        - reason
+    action:
+      description: Operation performed under an anchor.
+      required_fields:
+        - actor
+        - summary
+        - timestamp
+    artifact:
+      description: Output produced by an action.
+      required_fields:
+        - path
+        - type
+        - summary
+    verification:
+      description: Evidence that the chain is complete.
+      required_fields:
+        - method
+        - result
+
+integrity_levels:
+  L1:
+    required:
+      - anchor
+      - artifact
+  L2:
+    required:
+      - anchor
+      - action
+      - artifact
+      - verification
+  L3:
+    required:
+      - anchor
+      - action
+      - artifact
+      - verification
+      - ordering_check
+      - consistency_check
