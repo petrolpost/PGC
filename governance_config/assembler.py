@@ -36,6 +36,21 @@ def assemble(config_path: Path) -> Dict[str, str]:
             rendered.update(_render_tgs_file(module.integrity_level or "L1"))
             continue
 
+        if module_name == "journal":
+            if module.adapter != "journal:file":
+                raise ValueError(
+                    f"Unknown adapter '{module.adapter}'. Available: journal:file"
+                )
+            contract_path = (base_dir / module.contract).resolve()
+            if not contract_path.exists():
+                raise FileNotFoundError(f"Journal contract not found: {contract_path}")
+            record_format = module.record_format or "jsonl"
+            startup_capture = module.startup_capture if module.startup_capture is not None else True
+            rendered.update(
+                _render_journal_file(record_format=record_format, startup_capture=startup_capture)
+            )
+            continue
+
     return rendered
 
 
@@ -75,6 +90,79 @@ def _render_tgs_file(integrity_level: str) -> Dict[str, str]:
     return {
         ".tgs/instructions.md": instructions,
         ".tgs/audit-report.md": audit_report,
+    }
+
+
+def _render_journal_file(record_format: str = "jsonl", startup_capture: bool = True) -> Dict[str, str]:
+    """Render journal module files: manifest, events, state, handoff, and logs placeholder."""
+    manifest = "\n".join(
+        [
+            "# Journal Manifest",
+            "",
+            "## Task Identity",
+            "",
+            "- task_id: (auto)",
+            "- created_at: (auto)",
+            "- resumed_at: (auto)",
+            "",
+            "## Ledger Policy",
+            "",
+            f"- record_format: {record_format}",
+            f"- startup_capture: {startup_capture}",
+            "- append_first: true",
+            "- handoff_derived: true",
+        ]
+    )
+
+    events = ""
+
+    state = "\n".join(
+        [
+            "# Task State",
+            "",
+            "## Current",
+            "",
+            "- status: pending",
+            "- phase: init",
+            "- progress: 0%",
+        ]
+    )
+
+    handoff = "\n".join(
+        [
+            "# Handoff Note",
+            "",
+            "> This file is derived from ledger records.",
+            "> Do not edit directly -- update events.jsonl and regenerate.",
+            "",
+            "## Task Summary",
+            "",
+            "(auto-generated)",
+            "",
+            "## Current State",
+            "",
+            "(auto-generated)",
+            "",
+            "## Next Steps",
+            "",
+            "(auto-generated)",
+        ]
+    )
+
+    logs_readme = "\n".join(
+        [
+            "# Logs",
+            "",
+            "This directory stores raw startup information, error output, and verification output.",
+        ]
+    )
+
+    return {
+        ".journal/manifest.yaml": manifest,
+        ".journal/events.jsonl": events,
+        ".journal/state.yaml": state,
+        ".journal/handoff.md": handoff,
+        ".journal/logs/README.md": logs_readme,
     }
 
 

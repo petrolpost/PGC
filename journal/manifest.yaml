@@ -1,0 +1,42 @@
+metadata:
+  name: journal
+  version: 0.1.0
+
+journal:
+  concepts:
+    task:
+      description: The unit of work being executed or resumed.
+      required_fields:
+        - id
+        - created_at
+        - status
+    event:
+      description: An append-only record of something that happened during execution.
+      required_fields:
+        - timestamp
+        - type
+        - summary
+    state:
+      description: The latest durable snapshot of the task.
+      required_fields:
+        - status
+        - phase
+        - progress
+    error:
+      description: A captured failure, warning, or partial failure record.
+      required_fields:
+        - timestamp
+        - severity
+        - message
+    handoff:
+      description: A derived summary for the next agent or thread.
+      required_fields:
+        - task_summary
+        - current_state
+        - next_steps
+
+  ledger_policy:
+    append_first: true
+    event_source_of_truth: events.jsonl
+    handoff_derived: true
+    handoff_format: markdown
