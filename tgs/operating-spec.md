@@ -2,13 +2,14 @@
 
 This file defines how TGS is operated inside the PGC repository.
 
-It describes the repository-local GitHub-backed TGS profile, not the full definition of TGS Core and not a future package installation format.
+It defines how this repository adopts the GitHub Issue-driven profile, not the full definition of TGS Core and not a future package installation format.
 
 It closes the gap between:
 
 - `Agent.md`, which routes an agent to the right rule set
 - `.agent/rules/issue-driven.md`, which governs delivery lifecycle
 - `tgs/README.md`, which defines concepts and integrity levels
+- `tgs/profiles/github-issue-driven.md`, which defines the GitHub-backed profile mapping
 - `tgs/instructions.md`, which defines the rendered instruction surface
 
 ## Current State vs Target State
@@ -18,6 +19,7 @@ It closes the gap between:
 | `Agent.md` | Defines project-wide entry rules and on-demand navigation. | TGS has no explicit navigation entry. | Keep `Agent.md` as entry only and add TGS navigation. |
 | `.agent/rules/issue-driven.md` | Defines Issue lifecycle, branch rules, spec-first, PR closing. | It governs delivery, but not traceability semantics. | Keep lifecycle governance here and hand off traceability operation to TGS. |
 | `tgs/README.md` | Defines TGS concepts and integrity levels. | It explains what TGS is, but not how this repo should operate it. | Keep it as concept overview and document map. |
+| `tgs/profiles/github-issue-driven.md` | Defines the GitHub-backed TGS mapping. | The mapping is not yet isolated as a profile artifact. | Keep platform mapping in the profile and reference it from repo rules. |
 | `tgs/instructions.md` | Defines slash command surface and discipline. | It can be mistaken for the full operating rule set. | Keep it as rendered instruction contract only. |
 | `tgs/*` | Includes contract, injection, adapter, and audit docs. | No single file defines repository operating policy. | Add `tgs/operating-spec.md` as the operating authority. |
 
@@ -28,6 +30,7 @@ It closes the gap between:
 | `Agent.md` | Project entry, always-on rules, on-demand navigation. | Detailed TGS procedures or trace record templates. |
 | `.agent/rules/issue-driven.md` | Work intake, branch/spec/commit/PR lifecycle. | TGS command catalog or integrity-level policy. |
 | `tgs/README.md` | TGS positioning, concepts, integrity levels, doc map. | Repository-specific step-by-step operating workflow. |
+| `tgs/profiles/github-issue-driven.md` | GitHub object mapping and profile-level semantics. | Repository ownership, renderer behavior, or package install flow. |
 | `tgs/instructions.md` | Rendered command surface and minimal discipline. | Full repo workflow, ownership rules, or migration policy. |
 | `tgs/operating-spec.md` | Repository operating workflow, phase mapping, integrity-level usage, retirement plan. | Low-level schema fields already defined in `traceability-contract.yaml`. |
 
@@ -48,6 +51,19 @@ The repository rule for this issue is:
 - leave formal package design to follow-up work
 
 ## Repository Operating Rules
+
+## Repository Profile Adoption
+
+This repository adopts `tgs/profiles/github-issue-driven.md` as its canonical GitHub-backed TGS profile.
+
+The split of responsibility is:
+
+- the profile defines GitHub object mapping and profile-level semantics
+- this operating spec defines repository-local adoption, integrity defaults, and handoff rules
+- `.agent/rules/issue-driven.md` defines delivery mechanics
+- `tgs/instructions.md` defines only the rendered command surface
+
+When repository workflow interpretation changes, update the profile first if the change affects GitHub object mapping, then update this file for repository-local adoption rules.
 
 ### 1. Scope
 
@@ -80,31 +96,18 @@ Map TGS onto Issue-Driven Development as follows:
 | Phase 3: Development Process | Keep Action -> Artifact links for meaningful outputs such as spec, tests, code, docs, or generated rule files. |
 | Phase 4: PR Submission & Merge | Attach Verification evidence before closing the chain. |
 
-### 3.1 GitHub Object Mapping
+### 3.1 Profile Reference
 
-Use the following repository-level mapping when TGS is implemented through GitHub Issue-driven delivery:
+Use `tgs/profiles/github-issue-driven.md` for the canonical GitHub object mapping.
 
-| GitHub Object or Event | TGS Role | Minimum Repository Interpretation |
-|---|---|---|
-| GitHub Issue title, body, labels, and DoD | Anchor + Artifact | The Issue is the default starting point for the chain, and its text is a reviewable statement of intent, scope, and completion criteria. |
-| Issue claim, assignment, or linked working branch | Action | Claiming the Issue records that work has been intentionally started under the Anchor. |
-| `docs/issues/<issue>/spec.md` | Artifact | The spec is the reviewable design artifact linked back to the Anchor. |
-| `docs/issues/<issue>/test-plan.md` | Artifact | The test plan is the reviewable verification-planning artifact linked back to the Anchor. |
-| Git commit that references the Issue | Action + Artifact | A commit records a concrete delivery step, and the commit message plus diff are traceable output under the Anchor. |
-| Pull request open or update event | Action + Artifact | Opening or updating a PR is a delivery action; the PR body, linked Issue reference, and diff are reviewable artifacts. |
-| Review decision or review comment | Artifact + Verification | Review records are preserved evidence of acceptance, rejection, or required follow-up; approval or change request are concrete forms of a review decision or review comment. |
-| Status checks, test results, or required check conclusions on the PR | Verification | Checks provide explicit, reproducible verification evidence tied to the change set. |
-| Merge commit or Merge event | Artifact + Verification | Merge records the landed result and confirms the reviewed change has entered the repository history. |
-| Issue Close event or closed state linked to the merged PR | Action + Verification | Close is the terminal workflow action, and the closed state is only valid after verification evidence is attached. |
-
-The minimum repository-local interpretation is:
+The minimum repository-local interpretation remains:
 
 - Anchor: GitHub Issue
 - Action: claim, commit, PR update, merge-adjacent workflow transitions, and close
 - Artifact: Issue text, spec, test plan, commit history, PR body/diff, and review records
 - Verification: PR linkage, status checks, test outputs, review conclusions, merge evidence, and final close state
 
-This mapping defines the first repository-local GitHub-backed TGS profile. It is a practical profile layered on top of TGS Core, not the full limit of what TGS can represent.
+This repository adopts that mapping as the first repository-local GitHub-backed TGS profile. It is a practical profile layered on top of TGS Core, not the full limit of what TGS can represent.
 
 ### 4. Artifact Policy
 

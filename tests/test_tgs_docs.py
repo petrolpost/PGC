@@ -4,6 +4,7 @@ from pathlib import Path
 REQUIRED_FILES = [
     "tgs/README.md",
     "tgs/operating-spec.md",
+    "tgs/profiles/github-issue-driven.md",
     "tgs/traceability-contract.yaml",
     "tgs/instructions.md",
     "tgs/adapters/file.md",
@@ -25,6 +26,7 @@ def test_tgs_readme_defines_core_concepts() -> None:
         assert term in content
     assert "orthogonal to PGC" in content
     assert "tgs/operating-spec.md" in content
+    assert "tgs/profiles/github-issue-driven.md" in content
     for term in ["TGS Core", "TGS Profile", "TGS Adapter", "TGS Package"]:
         assert term in content
 
@@ -33,8 +35,17 @@ def test_tgs_operating_spec_defines_repo_boundary() -> None:
     content = Path("tgs/operating-spec.md").read_text(encoding="utf-8")
     assert "Current State vs Target State" in content
     assert "Layer Boundary In This Repo" in content
+    assert "Document Responsibilities" in content
+    assert "Repository Profile Adoption" in content
     assert "Old Rule Retirement Plan" in content
     assert "L2 by default" in content
+    assert "tgs/profiles/github-issue-driven.md" in content
+
+
+def test_github_issue_driven_profile_defines_mapping() -> None:
+    content = Path("tgs/profiles/github-issue-driven.md").read_text(encoding="utf-8")
+    assert "GitHub Issue-driven Profile" in content
+    assert "first concrete GitHub-backed TGS profile" in content
     assert "GitHub Object Mapping" in content
     for term in [
         "GitHub Issue",
@@ -52,9 +63,8 @@ def test_tgs_operating_spec_defines_repo_boundary() -> None:
 def test_tgs_readme_and_instructions_reference_issue_driven_instance() -> None:
     readme = Path("tgs/README.md").read_text(encoding="utf-8")
     instructions = Path("tgs/instructions.md").read_text(encoding="utf-8")
-    assert "GitHub Issue-driven delivery as the first concrete GitHub-backed TGS profile" in readme
-    assert "GitHub Issue" in readme
-    assert "review / merge / test evidence" in readme
+    assert "GitHub Issue-driven Profile" in readme
+    assert "tgs/profiles/github-issue-driven.md" in readme
     assert "github issue-driven reference" in instructions.lower()
     assert "github issue-driven delivery is the default github-backed tgs profile" in instructions.lower()
     assert "review outcomes, and merge evidence before closure" in instructions

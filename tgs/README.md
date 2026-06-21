@@ -19,7 +19,8 @@ Why does an action happen, who performed it, what artifact was produced, and how
 | File | Role |
 |---|---|
 | `tgs/README.md` | Positioning, concepts, integrity levels, and navigation. |
-| `tgs/operating-spec.md` | Repository operating policy for running TGS with Issue-driven delivery. |
+| `tgs/profiles/github-issue-driven.md` | The first concrete GitHub-backed TGS profile and object mapping. |
+| `tgs/operating-spec.md` | Repository operating policy for adopting the GitHub Issue-driven profile. |
 | `tgs/instructions.md` | Rendered instruction surface for agent-facing TGS commands. |
 | `tgs/traceability-contract.yaml` | Traceability contract schema and required fields. |
 | `tgs/adapters/` | Adapter-specific rendering behavior. |
@@ -62,22 +63,17 @@ It does not yet define a formal installable `TGS Package` format.
 
 ## Repository Profile
 
-This repository uses GitHub Issue-driven delivery as the first concrete GitHub-backed TGS profile.
+This repository uses the [GitHub Issue-driven Profile](file:///e:/workspaces/self/PGC/tgs/profiles/github-issue-driven.md) as the first concrete GitHub-backed TGS profile.
 
-| GitHub Workflow Object | TGS Meaning |
-|---|---|
-| GitHub Issue | Default Anchor |
-| `docs/issues/<issue>/spec.md` | Artifact |
-| `docs/issues/<issue>/test-plan.md` | Artifact |
-| commit / PR submission / close | Action |
-| review / merge / test evidence | Verification |
-
-Use `tgs/operating-spec.md` for the full repository mapping and lifecycle interpretation. Use `.agent/rules/issue-driven.md` for the delivery mechanics that produce those GitHub objects.
+Use `tgs/profiles/github-issue-driven.md` for the canonical GitHub object mapping.
+Use `tgs/operating-spec.md` for the repository-local adoption rules and lifecycle interpretation.
+Use `.agent/rules/issue-driven.md` for the delivery mechanics that produce those GitHub objects.
 
 ## Repository Usage Boundary
 
 - `Agent.md` decides when TGS documents should be loaded.
 - `.agent/rules/issue-driven.md` governs the delivery lifecycle.
+- `tgs/profiles/github-issue-driven.md` defines the GitHub Issue-driven Profile.
 - `tgs/operating-spec.md` governs the GitHub-backed TGS profile used in this repository.
 - `tgs/instructions.md` stays minimal so rendered `.tgs/instructions.md` remains concise.
 - `tgs/` is the TGS source-of-truth directory; `.tgs/` is the rendered runtime output directory.
