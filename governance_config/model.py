@@ -25,6 +25,8 @@ class ModuleConfig(BaseModel):
     adapter: str
     integrity_level: Optional[str] = None
     command_surface: Optional[str] = None
+    record_format: Optional[str] = None
+    startup_capture: Optional[bool] = None
     model_config = ConfigDict(extra="forbid")
 
     @field_validator("adapter")

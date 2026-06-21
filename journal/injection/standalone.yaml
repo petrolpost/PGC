@@ -1,0 +1,14 @@
+governance:
+  mode: run-time
+
+modules:
+  journal:
+    enabled: true
+    contract: .journal/manifest.yaml
+    adapter: journal:file
+    record_format: jsonl
+    startup_capture: true
+
+output:
+  directory: .
+  cache: .pgc/cache
