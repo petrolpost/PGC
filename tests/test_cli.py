@@ -340,3 +340,36 @@ class TestRender:
         result = runner.invoke(app, ["render", str(bad_file), "--adapter", "claude-code"])
         assert result.exit_code == 1
         assert "Validation failed" in result.output
+
+    # R-5: Render from governance config
+    def test_render_from_governance_config(self, tmp_path: Path) -> None:
+        project = tmp_path / "project"
+        project.mkdir()
+        pgc_dir = project / ".pgc"
+        pgc_dir.mkdir()
+        write_pgc_yaml(pgc_dir, "valid_doc", "agent.pgc.yaml")
+        config = project / "governance.yaml"
+        config.write_text(
+            yaml.dump(
+                {
+                    "governance": {"mode": "run-time"},
+                    "modules": {
+                        "pgc": {
+                            "enabled": True,
+                            "contract": ".pgc/agent.pgc.yaml",
+                            "adapter": "pgc:claude-code",
+                        }
+                    },
+                    "output": {"directory": "rendered", "cache": ".pgc/cache"},
+                },
+                sort_keys=False,
+            ),
+            encoding="utf-8",
+        )
+        out_dir = project / "rendered"
+
+        result = runner.invoke(app, ["render", "--config", str(config), "--output", str(out_dir)])
+
+        assert result.exit_code == 0
+        assert (out_dir / "CLAUDE.md").exists()
+        assert "Core Developer" in (out_dir / "CLAUDE.md").read_text(encoding="utf-8")
