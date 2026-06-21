@@ -178,11 +178,34 @@ def _get_adapter(name: str):
 
 @app.command()
 def render(
-    path: Path = typer.Argument(..., help="PGC YAML file to render"),
-    adapter: str = typer.Option(..., "--adapter", "-a", help="Target adapter name"),
+    path: Optional[Path] = typer.Argument(None, help="PGC YAML file to render"),
+    adapter: Optional[str] = typer.Option(None, "--adapter", "-a", help="Target adapter name"),
     output: Path = typer.Option(".", "--output", "-o", help="Output directory"),
+    config: Optional[Path] = typer.Option(None, "--config", "-c", help="Governance configuration file"),
 ) -> None:
-    """Render a PGC governance document to runtime-specific configuration files."""
+    """Render governance documents to runtime-specific configuration files."""
+    if config is not None:
+        try:
+            from governance_config.assembler import render_config
+
+            files = render_config(config, output)
+        except Exception as e:
+            console.print(f"[red]Error:[/red] Config render failed: {e}")
+            raise typer.Exit(code=1)
+
+        for rel_path in files:
+            console.print(f"  [green]Created:[/green] {rel_path}")
+        console.print(f"\n[green][OK] Rendered {len(files)} file(s) to '{output.resolve()}'[/green]")
+        return
+
+    if path is None:
+        console.print("[red]Error:[/red] Either PATH or --config is required.")
+        raise typer.Exit(code=1)
+
+    if adapter is None:
+        console.print("[red]Error:[/red] --adapter is required when rendering a PGC YAML file.")
+        raise typer.Exit(code=1)
+
     target = path.resolve()
 
     if not target.exists():
