@@ -14,7 +14,7 @@ PGC is an **Agent Governance Schema**, NOT an execution/runtime framework.
 1. **Governance ≠ Control**: Declare boundaries & constraints. NEVER dictate execution flow, reasoning, or tool order.
 2. **Agent Autonomy First**: Agents are free to plan/act as long as they satisfy PGC constraints.
 3. **Runtime Agnostic**: Schema stays pure. Implementation is delegated to `pgc_adapter`.
-4. **Issue-Driven Development**: No Issue, no code change. All features, bug fixes, and docs must be bound to a GitHub Issue with clear DoD (Definition of Done). See `.agent/rules/issue-driven.md` for the full workflow.
+4. **Issue-Driven Development**: No Issue, no code change. All features, bug fixes, and docs must be bound to a GitHub Issue with clear DoD (Definition of Done). See `tgs/operating-spec.md` for the repository TGS workflow and `.agent/rules/issue-driven.md` for the lifecycle companion rules.
 
 ### Key Definitions
 
@@ -53,4 +53,6 @@ Before generating code, ALWAYS reference:
 | 架构详细规范与术语完整定义 | `.agent/rules/architecture.md` |
 | Adapter 开发 | `.agent/rules/adapter.md` |
 | Issue 驱动开发流程 | `.agent/rules/issue-driven.md` |
+| TGS 概念与完整性级别 | `tgs/README.md` |
+| TGS 仓库运行规范与退场策略 | `tgs/operating-spec.md` |
 | 技术问题排查 | `.agent/solutions/README.md` |

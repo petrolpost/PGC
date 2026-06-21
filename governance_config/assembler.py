@@ -45,9 +45,14 @@ def assemble(config_path: Path) -> Dict[str, str]:
             if not contract_path.exists():
                 raise FileNotFoundError(f"Journal contract not found: {contract_path}")
             record_format = module.record_format or "jsonl"
-            startup_capture = module.startup_capture if module.startup_capture is not None else True
+            startup_capture = (
+                module.startup_capture if module.startup_capture is not None else True
+            )
             rendered.update(
-                _render_journal_file(record_format=record_format, startup_capture=startup_capture)
+                _render_journal_file(
+                    record_format=record_format,
+                    startup_capture=startup_capture,
+                )
             )
             continue
 
@@ -58,6 +63,10 @@ def _render_tgs_file(integrity_level: str) -> Dict[str, str]:
     instructions = "\n".join(
         [
             "# TGS Instructions",
+            "",
+            "TGS can expose traceability operations through rendered instructions.",
+            "",
+            "This file defines the instruction surface only. Repository operating policy lives in `tgs/operating-spec.md`.",
             "",
             "## Slash Command Surface",
             "",
@@ -74,6 +83,23 @@ def _render_tgs_file(integrity_level: str) -> Dict[str, str]:
             "- No context, no action.",
             "- No verification, no close.",
             "- No traceability, no completion.",
+            "- Preserve ordering between Anchor, Action, Artifact, and Verification.",
+            "",
+            "## GitHub Issue-driven Reference",
+            "",
+            "In this repository, GitHub Issue-driven delivery is the default operational expression of TGS.",
+            "",
+            "| TGS Operation | GitHub-Backed Reference |",
+            "|---|---|",
+            "| Anchor | Create or reference the GitHub Issue that authorizes the work. |",
+            "| Action | Record issue claim, commit creation, PR submission, and final close actions. |",
+            "| Artifact | Link the spec, test plan, changed files, and PR summary or diff. |",
+            "| Verification | Link test evidence, review outcomes, and merge evidence before closure. |",
+            "",
+            "## Boundary",
+            "",
+            "- Put repository workflow rules in `tgs/operating-spec.md`.",
+            "- Keep this file minimal so generated `.tgs/instructions.md` can stay focused on agent-facing operations.",
         ]
     )
     audit_report = "\n".join(
@@ -93,8 +119,11 @@ def _render_tgs_file(integrity_level: str) -> Dict[str, str]:
     }
 
 
-def _render_journal_file(record_format: str = "jsonl", startup_capture: bool = True) -> Dict[str, str]:
-    """Render journal module files: manifest, events, state, handoff, and logs placeholder."""
+def _render_journal_file(
+    record_format: str = "jsonl",
+    startup_capture: bool = True,
+) -> Dict[str, str]:
+    """Render journal module files: manifest, events, state, handoff, and logs."""
     manifest = "\n".join(
         [
             "# Journal Manifest",

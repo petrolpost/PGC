@@ -94,6 +94,12 @@ Test plan must include:
 - Verifiable test cases with commands and expected output
 - DoD checklist
 
+### Traceability Handoff
+
+If the repository or delivery flow enables TGS, use `tgs/operating-spec.md` to record Anchor, Action, Artifact, and Verification.
+
+This file governs lifecycle delivery. It does not define the TGS command surface or integrity-level policy.
+
 ### Commit Convention
 
 ```
