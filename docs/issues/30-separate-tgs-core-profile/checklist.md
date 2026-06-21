@@ -1,0 +1,8 @@
+- [ ] 已明确 `TGS Core`、`TGS Profile`、`TGS Adapter`、`TGS Package` 四层边界
+- [ ] 已明确 `GitHub-backed TGS` 在本仓库中的定位是 profile，而不是 TGS 本体
+- [ ] 已明确 `tgs/` 是源码/规范层，`.tgs/` 是运行产物层
+- [ ] 已明确当前阶段继续沿用 `Issue Driven` 作为变更追踪与交付纪律
+- [ ] 已明确本次变更不提前覆盖 `#31` 的 profile 抽离范围
+- [ ] 已明确本次变更不提前覆盖 `#32` 的 assembler 解耦范围
+- [ ] 已明确本次变更不提前覆盖 `#33` 的 package format 与 install flow 范围
+- [ ] 已包含对文档入口、目录语义和后续 Issue 依赖关系的验证要求

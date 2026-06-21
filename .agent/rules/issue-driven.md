@@ -98,7 +98,7 @@ Test plan must include:
 
 If the repository or delivery flow enables TGS, use `tgs/operating-spec.md` to record Anchor, Action, Artifact, and Verification.
 
-This file governs lifecycle delivery. It does not define the TGS command surface or integrity-level policy.
+This file governs lifecycle delivery. It does not define TGS Core, the GitHub-backed TGS profile boundary, the TGS command surface, or integrity-level policy.
 
 ### Commit Convention
 

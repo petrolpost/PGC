@@ -87,7 +87,7 @@ def _render_tgs_file(integrity_level: str) -> Dict[str, str]:
             "",
             "## GitHub Issue-driven Reference",
             "",
-            "In this repository, GitHub Issue-driven delivery is the default operational expression of TGS.",
+            "In this repository, GitHub Issue-driven delivery is the default GitHub-backed TGS profile.",
             "",
             "| TGS Operation | GitHub-Backed Reference |",
             "|---|---|",
@@ -100,6 +100,7 @@ def _render_tgs_file(integrity_level: str) -> Dict[str, str]:
             "",
             "- Put repository workflow rules in `tgs/operating-spec.md`.",
             "- Keep this file minimal so generated `.tgs/instructions.md` can stay focused on agent-facing operations.",
+            "- Do not use this file to redefine TGS Core or a future TGS package format.",
         ]
     )
     audit_report = "\n".join(

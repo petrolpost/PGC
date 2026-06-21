@@ -2,6 +2,8 @@
 
 This file defines how TGS is operated inside the PGC repository.
 
+It describes the repository-local GitHub-backed TGS profile, not the full definition of TGS Core and not a future package installation format.
+
 It closes the gap between:
 
 - `Agent.md`, which routes an agent to the right rule set
@@ -28,6 +30,22 @@ It closes the gap between:
 | `tgs/README.md` | TGS positioning, concepts, integrity levels, doc map. | Repository-specific step-by-step operating workflow. |
 | `tgs/instructions.md` | Rendered command surface and minimal discipline. | Full repo workflow, ownership rules, or migration policy. |
 | `tgs/operating-spec.md` | Repository operating workflow, phase mapping, integrity-level usage, retirement plan. | Low-level schema fields already defined in `traceability-contract.yaml`. |
+
+## Layer Boundary In This Repo
+
+| Layer | Repository Meaning | Current Home |
+|---|---|---|
+| `TGS Core` | Traceability concepts, integrity levels, and contracts that remain platform-agnostic. | `tgs/README.md`, `tgs/traceability-contract.yaml`, `tgs/audit/` |
+| `TGS Profile` | The GitHub-backed operating interpretation used by this repository. | `tgs/operating-spec.md` |
+| `TGS Adapter` | Rendering behavior that produces runtime-facing `.tgs/*` outputs. | `tgs/instructions.md`, `tgs/adapters/`, `governance_config/assembler.py` |
+| `TGS Package` | A future installable distribution unit for TGS. | Not defined in this issue or file. |
+
+The repository rule for this issue is:
+
+- treat GitHub-backed TGS as a profile layered on top of TGS Core
+- keep adapter behavior separate from profile meaning
+- do not treat `.tgs/` as a package format
+- leave formal package design to follow-up work
 
 ## Repository Operating Rules
 
@@ -86,7 +104,7 @@ The minimum repository-local interpretation is:
 - Artifact: Issue text, spec, test plan, commit history, PR body/diff, and review records
 - Verification: PR linkage, status checks, test outputs, review conclusions, merge evidence, and final close state
 
-This mapping defines the first repository-local TGS operating profile. It is a practical GitHub-backed implementation of TGS, not the full limit of what TGS can represent.
+This mapping defines the first repository-local GitHub-backed TGS profile. It is a practical profile layered on top of TGS Core, not the full limit of what TGS can represent.
 
 ### 4. Artifact Policy
 
@@ -128,6 +146,8 @@ Unless a stricter requirement exists, this repository should treat rule changes 
 | `tgs/injection/*.yaml` | Example composition entry points for standalone TGS or combined PGC + TGS usage. |
 
 This is why the operating spec belongs in `tgs/operating-spec.md`: it is part of the TGS source package, not a generated workspace artifact.
+
+It also means `.tgs/` should be read as rendered runtime output, not as the final definition of an installable TGS package.
 
 ## Old Rule Retirement Plan
 

@@ -133,9 +133,9 @@ def test_assemble_renders_tgs_file_adapter(tmp_path: Path) -> None:
     assert ".tgs/audit-report.md" in rendered
     assert "/tgs anchor create" in rendered[".tgs/instructions.md"]
     assert "GitHub Issue-driven Reference" in rendered[".tgs/instructions.md"]
-    assert (
-        "GitHub Issue-driven delivery is the default operational expression of TGS"
-        in rendered[".tgs/instructions.md"]
-    )
+    assert "GitHub Issue-driven delivery is the default GitHub-backed TGS profile" in rendered[
+        ".tgs/instructions.md"
+    ]
     assert "review outcomes, and merge evidence before closure" in rendered[".tgs/instructions.md"]
+    assert "future TGS package format" in rendered[".tgs/instructions.md"]
     assert "Integrity Level: L2" in rendered[".tgs/audit-report.md"]
