@@ -30,10 +30,14 @@ def assemble(config_path: Path) -> Dict[str, str]:
         if module_name == "tgs":
             if module.adapter != "tgs:file":
                 raise ValueError(f"Unknown adapter '{module.adapter}'. Available: tgs:file")
+            if module.source is None:
+                raise ValueError(
+                    "TGS modules must declare an external TGS source; "
+                    "PGC consumes TGS by configuration reference and does not render it."
+                )
             contract_path = (base_dir / module.contract).resolve()
             if not contract_path.exists():
                 raise FileNotFoundError(f"TGS contract not found: {contract_path}")
-            rendered.update(_render_tgs_file(module.integrity_level or "L1"))
             continue
 
         if module_name == "journal":
@@ -57,67 +61,6 @@ def assemble(config_path: Path) -> Dict[str, str]:
             continue
 
     return rendered
-
-
-def _render_tgs_file(integrity_level: str) -> Dict[str, str]:
-    instructions = "\n".join(
-        [
-            "# TGS Instructions",
-            "",
-            "TGS can expose traceability operations through rendered instructions.",
-            "",
-            "This file defines the instruction surface only. Repository operating policy lives in `tgs/operating-spec.md`.",
-            "",
-            "## Slash Command Surface",
-            "",
-            "```text",
-            "/tgs anchor create",
-            "/tgs action record",
-            "/tgs artifact record",
-            "/tgs verify",
-            "/tgs audit",
-            "```",
-            "",
-            "## Discipline",
-            "",
-            "- No context, no action.",
-            "- No verification, no close.",
-            "- No traceability, no completion.",
-            "- Preserve ordering between Anchor, Action, Artifact, and Verification.",
-            "",
-            "## GitHub Issue-driven Reference",
-            "",
-            "In this repository, GitHub Issue-driven delivery is the default GitHub-backed TGS profile.",
-            "",
-            "| TGS Operation | GitHub-Backed Reference |",
-            "|---|---|",
-            "| Anchor | Create or reference the GitHub Issue that authorizes the work. |",
-            "| Action | Record issue claim, commit creation, PR submission, and final close actions. |",
-            "| Artifact | Link the spec, test plan, changed files, and PR summary or diff. |",
-            "| Verification | Link test evidence, review outcomes, and merge evidence before closure. |",
-            "",
-            "## Boundary",
-            "",
-            "- Put repository workflow rules in `tgs/operating-spec.md`.",
-            "- Keep this file minimal so generated `.tgs/instructions.md` can stay focused on agent-facing operations.",
-            "- Do not use this file to redefine TGS Core or a future TGS package format.",
-        ]
-    )
-    audit_report = "\n".join(
-        [
-            "# TGS Audit Report",
-            "",
-            "## Summary",
-            "",
-            "- Anchor:",
-            f"- Integrity Level: {integrity_level}",
-            "- Result:",
-        ]
-    )
-    return {
-        ".tgs/instructions.md": instructions,
-        ".tgs/audit-report.md": audit_report,
-    }
 
 
 def _render_journal_file(
