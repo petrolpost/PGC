@@ -96,9 +96,9 @@ Test plan must include:
 
 ### Traceability Handoff
 
-If the repository or delivery flow enables TGS, use `tgs/operating-spec.md` to record Anchor, Action, Artifact, and Verification.
+If the repository or delivery flow enables TGS, use `tgs/README.md` to find the external TGS project and selected profile.
 
-This file governs lifecycle delivery. It does not define TGS Core, the GitHub-backed TGS profile boundary, the TGS command surface, or integrity-level policy.
+This file governs lifecycle delivery. It does not define TGS Core, the GitHub-backed TGS profile boundary, the TGS command surface, rendered outputs, or integrity-level policy.
 
 ### Commit Convention
 

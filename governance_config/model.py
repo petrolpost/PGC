@@ -23,6 +23,8 @@ class ModuleConfig(BaseModel):
     enabled: bool = Field(default=True)
     contract: Path
     adapter: str
+    source: Optional[Path] = None
+    profile: Optional[str] = None
     integrity_level: Optional[str] = None
     command_surface: Optional[str] = None
     record_format: Optional[str] = None

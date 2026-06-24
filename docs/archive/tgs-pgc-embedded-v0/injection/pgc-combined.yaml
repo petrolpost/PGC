@@ -11,8 +11,6 @@ modules:
     enabled: true
     contract: .tgs/traceability.yaml
     adapter: tgs:file
-    source: ../TraceabilityGovernanceSystem
-    profile: github-issue-driven
     integrity_level: L2
     command_surface: slash
 

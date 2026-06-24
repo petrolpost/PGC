@@ -1,17 +1,14 @@
-from pathlib import Path
-
+﻿from pathlib import Path
 
 REQUIRED_FILES = [
     "tgs/README.md",
-    "tgs/operating-spec.md",
-    "tgs/profiles/github-issue-driven.md",
-    "tgs/traceability-contract.yaml",
-    "tgs/instructions.md",
-    "tgs/adapters/file.md",
-    "tgs/injection/standalone.yaml",
+    "docs/archive/tgs-pgc-embedded-v0/README.md",
+    "docs/archive/tgs-pgc-embedded-v0/operating-spec.md",
+    "docs/archive/tgs-pgc-embedded-v0/profiles/github-issue-driven.md",
+    "docs/archive/tgs-pgc-embedded-v0/traceability-contract.yaml",
+    "docs/archive/tgs-pgc-embedded-v0/instructions.md",
+    "docs/archive/tgs-pgc-embedded-v0/adapters/file.md",
     "tgs/injection/pgc-combined.yaml",
-    "tgs/audit/integrity-checker.md",
-    "tgs/audit/audit-report-template.md",
 ]
 
 
@@ -20,60 +17,32 @@ def test_tgs_documentation_files_exist() -> None:
         assert Path(rel_path).exists(), rel_path
 
 
-def test_tgs_readme_defines_core_concepts() -> None:
+def test_tgs_readme_is_adoption_pointer_not_source_of_truth() -> None:
     content = Path("tgs/README.md").read_text(encoding="utf-8")
-    for term in ["Anchor", "Action", "Artifact", "Verification"]:
-        assert term in content
-    assert "orthogonal to PGC" in content
-    assert "tgs/operating-spec.md" in content
-    assert "tgs/profiles/github-issue-driven.md" in content
-    for term in ["TGS Core", "TGS Profile", "TGS Adapter", "TGS Package"]:
-        assert term in content
+    assert "TraceabilityGovernanceSystem" in content
+    assert "external TGS project" in content
+    assert "not the TGS source of truth" in content
+    assert "docs/archive/tgs-pgc-embedded-v0" in content
+    assert "Anchor |" not in content
+    assert "TGS Core |" not in content
 
 
-def test_tgs_operating_spec_defines_repo_boundary() -> None:
-    content = Path("tgs/operating-spec.md").read_text(encoding="utf-8")
-    assert "Current State vs Target State" in content
-    assert "Layer Boundary In This Repo" in content
-    assert "Document Responsibilities" in content
-    assert "Repository Profile Adoption" in content
-    assert "Old Rule Retirement Plan" in content
-    assert "L2 by default" in content
-    assert "tgs/profiles/github-issue-driven.md" in content
-
-
-def test_github_issue_driven_profile_defines_mapping() -> None:
-    content = Path("tgs/profiles/github-issue-driven.md").read_text(encoding="utf-8")
-    assert "GitHub Issue-driven Profile" in content
-    assert "first concrete GitHub-backed TGS profile" in content
-    assert "GitHub Object Mapping" in content
-    for term in [
-        "GitHub Issue",
-        "spec.md",
-        "test-plan.md",
-        "Git commit",
-        "Pull request",
-        "Review decision or review comment",
-        "Merge event",
-        "Close event",
-    ]:
-        assert term in content
+def test_pgc_archives_legacy_embedded_tgs_docs() -> None:
+    archived = Path("docs/archive/tgs-pgc-embedded-v0/README.md").read_text(encoding="utf-8")
+    assert "TGS: Traceability Governance System" in archived
+    assert "TGS Core" in archived
 
 
 def test_tgs_readme_and_instructions_reference_issue_driven_instance() -> None:
     readme = Path("tgs/README.md").read_text(encoding="utf-8")
-    instructions = Path("tgs/instructions.md").read_text(encoding="utf-8")
-    assert "GitHub Issue-driven Profile" in readme
-    assert "tgs/profiles/github-issue-driven.md" in readme
-    assert "github issue-driven reference" in instructions.lower()
-    assert "github issue-driven delivery is the default github-backed tgs profile" in instructions.lower()
-    assert "review outcomes, and merge evidence before closure" in instructions
-    assert "future tgs package format" in instructions.lower()
+    assert "github-issue-driven" in readme
+    assert "PGC consumes TGS by configuration reference" in readme
+    assert not Path("tgs/instructions.md").exists()
 
 
 def test_tgs_examples_use_namespaced_adapter() -> None:
-    standalone = Path("tgs/injection/standalone.yaml").read_text(encoding="utf-8")
     combined = Path("tgs/injection/pgc-combined.yaml").read_text(encoding="utf-8")
-    assert "adapter: tgs:file" in standalone
     assert "adapter: pgc:claude-code" in combined
     assert "adapter: tgs:file" in combined
+    assert "source: ../TraceabilityGovernanceSystem" in combined
+    assert "profile: github-issue-driven" in combined

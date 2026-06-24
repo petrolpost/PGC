@@ -110,7 +110,31 @@ def test_assemble_rejects_unknown_adapter(tmp_path: Path) -> None:
         raise AssertionError("Expected unknown adapter failure")
 
 
-def test_assemble_renders_tgs_file_adapter(tmp_path: Path) -> None:
+def test_assemble_records_external_tgs_reference_without_rendering_tgs(tmp_path: Path) -> None:
+    write_yaml(tmp_path / ".tgs" / "traceability.yaml", {"traceability": {"level": "L2"}})
+    write_yaml(
+        tmp_path / "governance.yaml",
+        {
+            "modules": {
+                "tgs": {
+                    "enabled": True,
+                    "contract": ".tgs/traceability.yaml",
+                    "adapter": "tgs:file",
+                    "source": "../TraceabilityGovernanceSystem",
+                    "profile": "github-issue-driven",
+                    "integrity_level": "L2",
+                    "command_surface": "slash",
+                }
+            }
+        },
+    )
+
+    rendered = assemble(tmp_path / "governance.yaml")
+
+    assert rendered == {}
+
+
+def test_assemble_rejects_tgs_module_without_external_source(tmp_path: Path) -> None:
     write_yaml(tmp_path / ".tgs" / "traceability.yaml", {"traceability": {"level": "L2"}})
     write_yaml(
         tmp_path / "governance.yaml",
@@ -121,21 +145,14 @@ def test_assemble_renders_tgs_file_adapter(tmp_path: Path) -> None:
                     "contract": ".tgs/traceability.yaml",
                     "adapter": "tgs:file",
                     "integrity_level": "L2",
-                    "command_surface": "slash",
                 }
             }
         },
     )
 
-    rendered = assemble(tmp_path / "governance.yaml")
-
-    assert ".tgs/instructions.md" in rendered
-    assert ".tgs/audit-report.md" in rendered
-    assert "/tgs anchor create" in rendered[".tgs/instructions.md"]
-    assert "GitHub Issue-driven Reference" in rendered[".tgs/instructions.md"]
-    assert "GitHub Issue-driven delivery is the default GitHub-backed TGS profile" in rendered[
-        ".tgs/instructions.md"
-    ]
-    assert "review outcomes, and merge evidence before closure" in rendered[".tgs/instructions.md"]
-    assert "future TGS package format" in rendered[".tgs/instructions.md"]
-    assert "Integrity Level: L2" in rendered[".tgs/audit-report.md"]
+    try:
+        assemble(tmp_path / "governance.yaml")
+    except ValueError as exc:
+        assert "external TGS source" in str(exc)
+    else:
+        raise AssertionError("Expected missing external source failure")
